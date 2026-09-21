@@ -86,7 +86,7 @@
 
 ### 共创者
 
-**华中师范大学 2026 级人工智能专业全体研究生**（暂定）
+**华中师范大学 2026 级人工智能专业全体研究生**
 
 欢迎通过 Issue 或 Pull Request 提出勘误、补充内容与改进建议。
 
@@ -124,7 +124,7 @@ You can read the Markdown file directly on GitHub or download the PDF for offlin
 
 ### Project Contributors
 
-**All graduate students in the 2026 cohort of the Artificial Intelligence program at Central China Normal University (CCNU)** *(tentative)*
+**All graduate students in the 2026 cohort of the Artificial Intelligence program at Central China Normal University (CCNU)** 
 
 Corrections, additions, and suggestions are welcome through Issues and Pull Requests.
 
