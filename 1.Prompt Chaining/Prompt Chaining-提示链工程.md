@@ -9,7 +9,7 @@
 将庞大问题拆解为可管理的小子问题的工程范式转变
 User-Prompt1-...-Agent 1 - Output -> Prompt n - ... -> Agent n - final Output
 步骤N的输出作为步骤N+1的输入，
-结构化握手（Structure Handshaker）
+结构化握手（Structure Handshaker）：节点之间强制使用JSON或XML等结构化数据格式进行传递，防止自然语言的模糊性导致整控模糊性导致整条链条崩溃
 
 核心工程：上下文工程（Context Engineering）
 在生成Token之前，为AI模型设计、构建并交付完整信息环境的系统学科
