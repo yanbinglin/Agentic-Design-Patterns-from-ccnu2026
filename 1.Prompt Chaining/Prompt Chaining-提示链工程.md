@@ -1,4 +1,4 @@
-采用分而治之架构构建复杂智能体系统的实践指南
+采用**分而治之**架构构建复杂智能体系统的实践指南
 传统单提示的认知瓶颈（单一指令）
 - 指令忽视
 - 上下文漂移
@@ -15,3 +15,4 @@ User-Prompt1-...-Agent 1 - Output -> Prompt n - ... -> Agent n - final Output
 在生成Token之前，为AI模型设计、构建并交付完整信息环境的系统学科
 Context Engineering：
 Prompt Engineering、Structured Outputs、RAG、State/History、Memory
+
