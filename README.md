@@ -45,44 +45,44 @@
 
 - [Chapter 1: Prompt Chaining 提示链](1.Prompt%20Chaining/readme.md)
 - [Chapter 2: Routing 路由](2.Routing/路由-智能体动态决策器.md)
-- [Chapter 3: Parallelization 并行化](3.Parallelization/readme.md)
+- [Chapter 3: Parallelization 并行化](3.Parallelization/%E5%B9%B6%E8%A1%8C%E5%8C%96.md)
 - [Chapter 4: Reflection 反思](4.Reflection/反思：通过反馈改进智能体结果.md)
-- [Chapter 5: Tool Use (Function Calling)](./Tool Use(Function Calling)/Tool Use.md)
-- [Chapter 6: Planning 规划](6.Planning/readme.md)
-- [Chapter 7: Multi-Agent Collaboration 多智能体协作](7.Multi-Agent%20Collaboration/readme.md)
+- [Chapter 5: Tool Use (Function Calling)](5.Tool%20Use%20%28Function%20Calling%29/Tool%20Use.md)
+- [Chapter 6: Planning 规划](6.Planning/Planning.md)
+- [Chapter 7: Multi-Agent Collaboration 多智能体协作](7.Multi-Agent%20Collaboration/%E5%A4%9A%E6%99%BA%E8%83%BD%E4%BD%93%E5%8D%8F%E4%BD%9C.md)
 
 **Part Two: Advanced Systems**
 
 - [Chapter 8: Memory Management 记忆管理](8.Memory%20Management/Memory%20Management%20记忆管理.md)
 - [Chapter 9: Learning and Adaptation 学习与适应](9.Learning%20and%20Adaptation/Learning%20and%20Adaptation%20学习与适应.md)
 - [Chapter 10: Model Context Protocol (MCP) 模型上下文协议](10.Model%20Context%20Protocol%20(MCP)/Model%20Context%20Protocol%20(MCP)%20模型上下文协议.md)
-- [Chapter 11: Goal Setting and Monitoring 目标设定与监控](11.Goal%20Setting%20and%20Monitoring/readme.md)
+- [Chapter 11: Goal Setting and Monitoring 目标设定与监控](11.Goal%20Setting%20and%20Monitoring/Goal%20Setting%20and%20Monitoring.md)
 
 **Part Three: Production Concerns**
 
-- [Chapter 12: Exception Handling and Recovery 异常处理与恢复](12.Exception%20Handling%20and%20Recovery/readme.md)
-- [Chapter 13: Human in the Loop 人在回路中](13.Human%20in%20the%20Loop/readme.md)
-- [Chapter 14: Knowledge Retrieval (RAG) 知识检索](14.Knowledge%20Retrieval%20%28RAG%29/readme.md)
+- [Chapter 12: Exception Handling and Recovery 异常处理与恢复](12.Exception%20Handling%20and%20Recovery/Exception%20Handling%20and%20Recovery.md)
+- [Chapter 13: Human in the Loop 人在回路中](13.Human%20in%20the%20Loop/Human%20in%20the%20Loop.md)
+- [Chapter 14: Knowledge Retrieval (RAG) 知识检索](14.Knowledge%20Retrieval%20%28RAG%29/Knowledge%20Retrieval%20%28RAG%29.md)
 
 **Part Four: Multi-Agent Architectures**
 
-- [Chapter 15: Inter-Agent Communication (A2A) 智能体间通信](15.Inter-Agent%20Communication%20%28A2A%29/readme.md)
-- [Chapter 16: Resource-Aware Optimization 资源感知优化](16.Resource-Aware%20Optimization/readme.md)
-- [Chapter 17: Reasoning Techniques 推理技术](17.Reasoning%20Techniques/readme.md)
-- [Chapter 18: Guardrails and Safety Patterns 护栏与安全模式](18.Guardrails%20and%20Safety%20Patterns/readme.md)
-- [Chapter 19: Evaluation and Monitoring 评估与监控](19.Evaluation%20and%20Monitoring/readme.md)
-- [Chapter 20: Prioritization 优先级排序](20.Prioritization/readme.md)
-- [Chapter 21: Exploration and Discovery 探索与发现](21.Exploration%20and%20Discovery/readme.md)
+- [Chapter 15: Inter-Agent Communication (A2A) 智能体间通信](15.Inter-Agent%20Communication%20%28A2A%29/Inter-Agent%20Communication%20%28A2A%29.md)
+- [Chapter 16: Resource-Aware Optimization 资源感知优化](16.Resource-Aware%20Optimization/Resource-Aware%20Optimization.md)
+- [Chapter 17: Reasoning Techniques 推理技术](17.Reasoning%20Techniques/Reasoning%20Techniques.md)
+- [Chapter 18: Guardrails and Safety Patterns 护栏与安全模式](18.Guardrails%20and%20Safety%20Patterns/Guardrails%20and%20Safety%20Patterns.md)
+- [Chapter 19: Evaluation and Monitoring 评估与监控](19.Evaluation%20and%20Monitoring/Evaluation%20and%20Monitoring.md)
+- [Chapter 20: Prioritization 优先级排序](20.Prioritization/Prioritization.md)
+- [Chapter 21: Exploration and Discovery 探索与发现](21.Exploration%20and%20Discovery/Exploration%20and%20Discovery.md)
 
 **Appendix**
 
-- [Appendix A: Advanced Prompting Techniques 高级提示词技巧](22.Advanced%20Prompting%20Techniques/readme.md)
-- [Appendix B: AI Agentic Interactions: From GUI to Real-World Environment 智能体交互：从图形界面到真实世界环境](23.AI%20Agentic%20Interactions%20-%20From%20GUI%20to%20Real-World%20Environment/readme.md)
-- [Appendix C: Quick Overview of Agentic Frameworks 智能体设计与开发框架速览](24.Quick%20Overview%20of%20Agentic%20Frameworks/readme.md)
-- [Appendix D: Building an Agent with AgentSpace (online only) 使用 AgentSpace 构建智能体(仅在线)](25.Building%20an%20Agent%20with%20AgentSpace%20%28online%20only%29/readme.md)
-- [Appendix E - AI Agents on the CLI 命令行上的智能体](26.AI%20Agents%20on%20the%20CLI/readme.md)
-- [Appendix F: Under the Hood: An Inside Look at the Agent's Reasoning Engines 幕后揭秘:智能体推理引擎内窥](27.Under%20the%20Hood%20-%20An%20Inside%20Look%20at%20the%20Agent%27s%20Reasoning%20Engines/readme.md)
-- [Appendix G: Coding Agents 编程智能体](28.Coding%20Agents/readme.md)
+- [Appendix A: Advanced Prompting Techniques 高级提示词技巧](22.Advanced%20Prompting%20Techniques/Advanced%20Prompting%20Techniques.md)
+- [Appendix B: AI Agentic Interactions: From GUI to Real-World Environment 智能体交互：从图形界面到真实世界环境](23.AI%20Agentic%20Interactions%20-%20From%20GUI%20to%20Real-World%20Environment/AI%20Agentic%20Interactions%20-%20From%20GUI%20to%20Real-World%20Environment.md)
+- [Appendix C: Quick Overview of Agentic Frameworks 智能体设计与开发框架速览](24.Quick%20Overview%20of%20Agentic%20Frameworks/Quick%20Overview%20of%20Agentic%20Frameworks.md)
+- [Appendix D: Building an Agent with AgentSpace (online only) 使用 AgentSpace 构建智能体(仅在线)](25.Building%20an%20Agent%20with%20AgentSpace%20%28online%20only%29/Building%20an%20Agent%20with%20AgentSpace%20%28online%20only%29.md)
+- [Appendix E - AI Agents on the CLI 命令行上的智能体](26.AI%20Agents%20on%20the%20CLI/AI%20Agents%20on%20the%20CLI.md)
+- [Appendix F: Under the Hood: An Inside Look at the Agent's Reasoning Engines 幕后揭秘:智能体推理引擎内窥](27.Under%20the%20Hood%20-%20An%20Inside%20Look%20at%20the%20Agent%27s%20Reasoning%20Engines/Under%20the%20Hood%20-%20An%20Inside%20Look%20at%20the%20Agent%27s%20Reasoning%20Engines.md)
+- [Appendix G: Coding Agents 编程智能体](28.Coding%20Agents/Coding%20Agents.md)
 
 ### 共创者
 
