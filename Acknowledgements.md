@@ -13,8 +13,12 @@
 - Chapter 3: Parallelization 并行化
 	- 邱逢瑜
 - Chapter 4: Reflection 反思
-	- 刘佳俊：汇报主讲
-	- 郑亚春、张逸、胡麒瑞、谭道琦：多级汇报
+	-  郑亚春：反思模式基础
+	- 胡麒瑞：LangChain 多轮反思示例
+	- 张逸：Google ADK 示例
+	- 谭道琦：应用场景、优势与局限
+	- 刘佳俊：内容整合与总结
+	- [readme](1.Prompt%20Chaining/readme.md)
 - Chapter 5: Tool Use 工具调用
 	- 刘涛：现场汇报主讲答疑，内容研读与框架，确定「三问一判断」的主线，核对页码引用
 	- 张陈宇：撰写逐字稿，排练计时，控场与超时预案，辅助内容研读与框架确定
