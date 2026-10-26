@@ -55,7 +55,7 @@
 
 - [Chapter 8: Memory Management 记忆管理](8.Memory%20Management/Memory%20Management%20记忆管理.md)
 - [Chapter 9: Learning and Adaptation 学习与适应](9.Learning%20and%20Adaptation/Learning%20and%20Adaptation%20学习与适应.md)
-- [Chapter 10: Model Context Protocol (MCP) 模型上下文协议](10.Model%20Context%20Protocol%20%28MCP%29/readme.md)
+- [Chapter 10: Model Context Protocol (MCP) 模型上下文协议](10.Model%20Context%20Protocol%20(MCP)/Model%20Context%20Protocol%20(MCP)%20模型上下文协议.md)
 - [Chapter 11: Goal Setting and Monitoring 目标设定与监控](11.Goal%20Setting%20and%20Monitoring/readme.md)
 
 **Part Three: Production Concerns**
