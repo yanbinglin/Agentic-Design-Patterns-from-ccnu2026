@@ -44,10 +44,10 @@
 **Part One: Foundational Patterns**
 
 - [Chapter 1: Prompt Chaining 提示链](1.Prompt%20Chaining/readme.md)
-- [Chapter 2: Routing 路由](2.Routing/readme.md)
+- [Chapter 2: Routing 路由](2.Routing/路由-智能体动态决策器.md)
 - [Chapter 3: Parallelization 并行化](3.Parallelization/readme.md)
-- [Chapter 4: Reflection 反思](4.Reflection/readme.md)
-- [Chapter 5: Tool Use (Function Calling) 工具使用(函数调用) ](5.Tool%20Use%20%28Function%20Calling%29/readme.md)
+- [Chapter 4: Reflection 反思](4.Reflection/反思：通过反馈改进智能体结果.md)
+- [Chapter 5: Tool Use (Function Calling)](./Tool Use(Function Calling)/Tool Use.md)
 - [Chapter 6: Planning 规划](6.Planning/readme.md)
 - [Chapter 7: Multi-Agent Collaboration 多智能体协作](7.Multi-Agent%20Collaboration/readme.md)
 
