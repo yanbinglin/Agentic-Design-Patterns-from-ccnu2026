@@ -52,6 +52,11 @@
 	- 林立新：汇报组织方式、CrewAI 代码复现与结果解读
 	- 张怡萱：汇报误判案例走读、ADK 与交接包、独立验证、练习与总结
 - Chapter 8：Memory Management 记忆管理
+	- 杨镓锋：负责Google ADK的讲解
+	- 高新桂：有关Google ADK的代码复现及调试
+	- 周逸成：LangChain·LangCraph 的讲解汇报
+	- 陈忠强：LangChain·LangCraph的代码复现及调试
+	- 肖**：前言背景的讲解汇报
 - Chapter 9：Learning and Adaptation 学习与适应
 	- 吴俊德：汇报主讲人，设计整体框架，全书定位、主讲导入与总结收束
 	- 柴胜利：学习范式与对齐机制梳理（兼 PPT 制作），汇报六种学习范式、PPO与DPO对比
