@@ -11,7 +11,7 @@
 	- 汪子翾：PPT 代码演示Google ADK部分制作
 	- 黄晓龙：PPT 概述、实例演示部分制作
 - Chapter 3: Parallelization 并行化
-	- 邱逢瑜
+	- 邱逢瑜 
 - Chapter 4: Reflection 反思
 	-  郑亚春：反思模式基础
 	- 胡麒瑞：LangChain 多轮反思示例
@@ -35,3 +35,6 @@
 	- 孙怡：汇报通信模式、协作流程与拓扑
 	- 林立新：汇报组织方式、CrewAI 代码复现与结果解读
 	- 张怡萱：汇报误判案例走读、ADK 与交接包、独立验证、练习与总结
+- Chapter 8：Memory Management 记忆管理
+- Chapter 9：Learning and Adaptation 学习与适应
+	- 吴俊德：汇报主讲人，设计整体框架，全书定位、主讲内容：第 9 章导入与总结收束
