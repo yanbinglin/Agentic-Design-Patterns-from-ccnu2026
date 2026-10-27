@@ -15,7 +15,7 @@ Complied by: **ningg@GitHub** (翻译)
 
 **Part One: Foundational Patterns**
 
-- [Chapter 1: Prompt Chaining 提示链](1.Prompt%20Chaining/readme.md)
+- [Chapter 1: Prompt Chaining 提示链](4.Reflection/readme.md)
 - [Chapter 2: Routing 路由](2.Routing/readme.md)
 - [Chapter 3: Parallelization 并行化](3.Parallelization/readme.md)
 - [Chapter 4: Reflection 反思](4.Reflection/readme.md)

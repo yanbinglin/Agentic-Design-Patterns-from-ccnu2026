@@ -43,7 +43,7 @@
 
 **Part One: Foundational Patterns**
 
-- [Chapter 1: Prompt Chaining 提示链](1.Prompt%20Chaining/readme.md)
+- [Chapter 1: Prompt Chaining 提示链](4.Reflection/readme.md)
 - [Chapter 2: Routing 路由](2.Routing/路由-智能体动态决策器.md)
 - [Chapter 3: Parallelization 并行化](3.Parallelization/%E5%B9%B6%E8%A1%8C%E5%8C%96.md)
 - [Chapter 4: Reflection 反思](4.Reflection/反思：通过反馈改进智能体结果.md)
