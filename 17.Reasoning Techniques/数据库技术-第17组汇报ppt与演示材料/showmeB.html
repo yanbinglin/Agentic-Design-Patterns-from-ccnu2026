@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>SVG 示例</title>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 520" width="900" height="520" role="img" aria-label="Animated pelican riding a bicycle">
+  <title>Pelican Express - an animated pelican riding a bicycle</title>
+  <desc>
+    A cartoon pelican wearing a helmet and scarf pedals a red bicycle along a coastal road.
+    Pure SVG + SMIL (no JavaScript, no CSS keyframes): wheels and crank rotate, the legs are
+    a two-segment linkage driven by keyframed rotations, and the scenery scrolls to fake forward travel.
+  </desc>
+
+  <!--
+  ============================================================================
+  PROCESS STEPS (how this animation was built)
+  ============================================================================
+  STEP 1 - Stage & stage-lock: pick a 900x520 viewBox, fix the rider at a
+           constant screen position, and scroll the WORLD instead of the rider.
+           Horizon y=392, road surface y=428, ground contact y=428.
+  STEP 2 - Rig the bicycle first (it is the skeleton everything hangs from):
+           rear axle (290,370), front axle (530,370), bottom bracket / crank
+           centre (400,370), seat top (352,252), handlebar grip (490,246).
+           Wheel radius 58 so that 370 + 58 = 428 = ground line.
+  STEP 3 - Derive the pedaling IK instead of eyeballing it. Hip H=(355,250),
+           thigh L1=70, shin L2=78, crank radius 22. For 9 crank angles (0..360
+           step 45) the law-of-cosines solver, cos(delta)=(L1^2+d^2-L2^2)/(2*L1*d),
+           gives the thigh rotation and the knee rotation; those numbers are
+           pasted straight into the animateTransform value lists below. (An
+           equal-segment bisect shortcut was tried first and rejected: thigh
+           and shin are different lengths, and it left the feet up to 5.4px
+           off the pedals. The corrected solve lands within 1px.)
+           The far leg reuses the same lists shifted 4 frames inside the 8-frame
+           cycle (frame 8 duplicates frame 0, so the seam stays closed), and
+           each foot carries a counter-rotation equal to -(thigh+knee) so it
+           stays level on the pedal instead of swinging with the shin.
+  STEP 4 - Draw the pelican as 6 layered shapes (tail, body, neck, head,
+           beak + pouch, wing) and reuse the bike rig anchors as its contact
+           points: seat under the hip, wing tip on the grip, feet on the pedals.
+  STEP 5 - Add motion in layers, each with its own clock:
+           wheels 0.45s, crank + legs 0.90s (2:1 gearing), body bob 0.90s,
+           lean 3.6s, scarf 0.7s, head 1.4s, road dashes 0.55s,
+           verge 8s, hills 18s, clouds 45s, sun rays 40s.
+           Fast near layers + slow far layers = parallax = speed.
+  STEP 6 - Loop seam: every scrolling layer is drawn twice, offset by exactly
+           one tile width, and translated by exactly one tile width, so frame
+           N+1 is identical to frame 1.
+  STEP 7 - Validate: well-formed XML, every animation ends where it starts,
+           and no transform is animated on a node that already has a static
+           transform (each transform lives on its own wrapper group).
+  ============================================================================
+  -->
+
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#7ec8ef"/>
+      <stop offset="0.55" stop-color="#c7e9f7"/>
+      <stop offset="1" stop-color="#f7f0dd"/>
+    </linearGradient>
+    <linearGradient id="sea" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5fb3d4"/>
+      <stop offset="1" stop-color="#8fd0e0"/>
+    </linearGradient>
+    <linearGradient id="road" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#5a5b63"/>
+      <stop offset="1" stop-color="#3d3e45"/>
+    </linearGradient>
+    <radialGradient id="sunGlow" cx="0.5" cy="0.5" r="0.5">
+      <stop offset="0" stop-color="#ffe08a" stop-opacity="0.85"/>
+      <stop offset="1" stop-color="#ffe08a" stop-opacity="0"/>
+    </radialGradient>
+
+    <!-- one 900-wide tile of each scrolling layer, reused twice for the seam -->
+    <g id="hillTile">
+      <path d="M0,392 L0,352 Q120,300 240,346 Q360,392 480,336 Q600,286 720,342 Q810,378 900,352 L900,392 Z"
+            fill="#a9c98f"/>
+      <path d="M0,392 L0,368 Q150,336 300,366 Q450,394 600,362 Q750,332 900,368 L900,392 Z"
+            fill="#8fb877"/>
+    </g>
+    <g id="cloudTile">
+      <g fill="#ffffff" opacity="0.9">
+        <ellipse cx="120" cy="96" rx="52" ry="20"/>
+        <ellipse cx="150" cy="84" rx="34" ry="18"/>
+        <ellipse cx="470" cy="140" rx="40" ry="15"/>
+        <ellipse cx="495" cy="130" rx="26" ry="14"/>
+        <ellipse cx="760" cy="70" rx="46" ry="17"/>
+      </g>
+    </g>
+    <g id="vergeTile">
+      <g fill="#6f9a52">
+        <path d="M60,416 q6,-16 12,0 z"/>
+        <path d="M74,416 q7,-22 14,0 z"/>
+        <ellipse cx="180" cy="410" rx="26" ry="12"/>
+        <ellipse cx="205" cy="404" rx="18" ry="11"/>
+        <path d="M330,416 q6,-18 12,0 z"/>
+        <ellipse cx="470" cy="408" rx="30" ry="14"/>
+        <ellipse cx="500" cy="402" rx="20" ry="12"/>
+        <path d="M640,416 q7,-20 14,0 z"/>
+        <ellipse cx="760" cy="409" rx="24" ry="13"/>
+      </g>
+    </g>
+  </defs>
+
+  <!-- ============================ STEP 1: STAGE ============================ -->
+  <rect x="0" y="0" width="900" height="520" fill="url(#sky)"/>
+
+  <!-- sun: slow counter-rotating rays -->
+  <g>
+    <circle cx="772" cy="86" r="86" fill="url(#sunGlow)"/>
+    <g stroke="#ffd45e" stroke-width="5" stroke-linecap="round">
+      <animateTransform attributeName="transform" type="rotate" from="0 772 86" to="360 772 86"
+                        dur="40s" repeatCount="indefinite"/>
+      <line x1="772" y1="34" x2="772" y2="14"/>
+      <line x1="772" y1="138" x2="772" y2="158"/>
+      <line x1="720" y1="86" x2="700" y2="86"/>
+      <line x1="824" y1="86" x2="844" y2="86"/>
+      <line x1="735" y1="49" x2="721" y2="35"/>
+      <line x1="809" y1="123" x2="823" y2="137"/>
+      <line x1="809" y1="49" x2="823" y2="35"/>
+      <line x1="735" y1="123" x2="721" y2="137"/>
+    </g>
+    <circle cx="772" cy="86" r="34" fill="#ffd45e"/>
+  </g>
+
+  <!-- STEP 6 seam: clouds drawn twice, one tile width apart, drift one tile width -->
+  <g>
+    <animateTransform attributeName="transform" type="translate" from="0 0" to="-1200 0"
+                      dur="45s" repeatCount="indefinite"/>
+    <use href="#cloudTile" x="0"/>
+    <use href="#cloudTile" x="1200"/>
+  </g>
+
+  <!-- far parallax: hills, 18s -->
+  <g>
+    <animateTransform attributeName="transform" type="translate" from="0 0" to="-900 0"
+                      dur="18s" repeatCount="indefinite"/>
+    <use href="#hillTile" x="0"/>
+    <use href="#hillTile" x="900"/>
+  </g>
+
+  <!-- sea band with two dash-cycling wave lines -->
+  <rect x="0" y="392" width="900" height="36" fill="url(#sea)"/>
+  <g stroke="#ffffff" stroke-width="2" fill="none" opacity="0.55" stroke-dasharray="26 22">
+    <line x1="0" y1="402" x2="900" y2="402">
+      <animate attributeName="stroke-dashoffset" from="0" to="-48" dur="2.4s" repeatCount="indefinite"/>
+    </line>
+    <line x1="0" y1="416" x2="900" y2="416">
+      <animate attributeName="stroke-dashoffset" from="0" to="-48" dur="1.7s" repeatCount="indefinite"/>
+    </line>
+  </g>
+
+  <!-- grass verge: fastest scenery layer, 8s -->
+  <rect x="0" y="414" width="900" height="14" fill="#93c46b"/>
+  <g>
+    <animateTransform attributeName="transform" type="translate" from="0 0" to="-900 0"
+                      dur="8s" repeatCount="indefinite"/>
+    <use href="#vergeTile" x="0"/>
+    <use href="#vergeTile" x="900"/>
+  </g>
+
+  <!-- road -->
+  <rect x="0" y="428" width="900" height="92" fill="url(#road)"/>
+  <rect x="0" y="428" width="900" height="4" fill="#6d6e77"/>
+  <line x1="0" y1="478" x2="900" y2="478" stroke="#f2e28a" stroke-width="5"
+        stroke-dasharray="46 34" opacity="0.85">
+    <animate attributeName="stroke-dashoffset" from="0" to="-80" dur="0.55s" repeatCount="indefinite"/>
+  </line>
+
+  <!-- speed lines behind the rear wheel -->
+  <g stroke="#ffffff" stroke-width="4" stroke-linecap="round" opacity="0.7">
+    <line x1="150" y1="330" x2="205" y2="330">
+      <animate attributeName="opacity" values="0;0.8;0" dur="0.6s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="translate" from="40 0" to="-70 0"
+                        dur="0.6s" repeatCount="indefinite"/>
+    </line>
+    <line x1="120" y1="366" x2="190" y2="366">
+      <animate attributeName="opacity" values="0;0.7;0" dur="0.6s" begin="0.2s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="translate" from="40 0" to="-80 0"
+                        dur="0.6s" begin="0.2s" repeatCount="indefinite"/>
+    </line>
+    <line x1="160" y1="300" x2="210" y2="300">
+      <animate attributeName="opacity" values="0;0.6;0" dur="0.6s" begin="0.4s" repeatCount="indefinite"/>
+      <animateTransform attributeName="transform" type="translate" from="40 0" to="-60 0"
+                        dur="0.6s" begin="0.4s" repeatCount="indefinite"/>
+    </line>
+  </g>
+
+  <!-- contact shadow, breathing with the bob -->
+  <ellipse cx="410" cy="430" rx="152" ry="9" fill="#000000" opacity="0.2">
+    <animate attributeName="rx" values="152;144;152" dur="0.9s" repeatCount="indefinite"/>
+    <animate attributeName="opacity" values="0.2;0.14;0.2" dur="0.9s" repeatCount="indefinite"/>
+  </ellipse>
+
+  <!-- ==================== STEP 5: rider clock (bob) + lean ==================== -->
+  <g id="rider">
+    <animateTransform attributeName="transform" type="translate"
+                      values="0 0; 0 -6; 0 0; 0 -6; 0 0" dur="0.9s"
+                      calcMode="spline" keyTimes="0;0.25;0.5;0.75;1"
+                      keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"
+                      repeatCount="indefinite"/>
+    <g id="lean">
+      <animateTransform attributeName="transform" type="rotate"
+                        values="-1.2 410 370; 1.2 410 370; -1.2 410 370" dur="3.6s"
+                        repeatCount="indefinite"/>
+
+      <!-- STEP 2: wheels. radius 58, ground = 370 + 58 = 428 -->
+      <g id="wheel-rear">
+        <circle cx="290" cy="370" r="58" fill="none" stroke="#2b2f36" stroke-width="8"/>
+        <circle cx="290" cy="370" r="50" fill="#eef4f7"/>
+        <g>
+          <animateTransform attributeName="transform" type="rotate" from="0 290 370" to="360 290 370"
+                            dur="0.45s" repeatCount="indefinite"/>
+          <g stroke="#98a0a8" stroke-width="3">
+            <line x1="240" y1="370" x2="340" y2="370"/>
+            <line x1="290" y1="320" x2="290" y2="420"/>
+            <line x1="255" y1="335" x2="325" y2="405"/>
+            <line x1="255" y1="405" x2="325" y2="335"/>
+          </g>
+          <circle cx="290" cy="326" r="4" fill="#f2a33c"/>
+        </g>
+        <circle cx="290" cy="370" r="7" fill="#4b5158"/>
+      </g>
+
+      <g id="wheel-front">
+        <circle cx="530" cy="370" r="58" fill="none" stroke="#2b2f36" stroke-width="8"/>
+        <circle cx="530" cy="370" r="50" fill="#eef4f7"/>
+        <g>
+          <animateTransform attributeName="transform" type="rotate" from="0 530 370" to="360 530 370"
+                            dur="0.45s" repeatCount="indefinite"/>
+          <g stroke="#98a0a8" stroke-width="3">
+            <line x1="480" y1="370" x2="580" y2="370"/>
+            <line x1="530" y1="320" x2="530" y2="420"/>
+            <line x1="495" y1="335" x2="565" y2="405"/>
+            <line x1="495" y1="405" x2="565" y2="335"/>
+          </g>
+          <circle cx="530" cy="326" r="4" fill="#f2a33c"/>
+        </g>
+        <circle cx="530" cy="370" r="7" fill="#4b5158"/>
+      </g>
+
+      <!-- STEP 2: frame, fork, seat, bars -->
+      <g stroke="#d23b3b" stroke-width="8" stroke-linecap="round" fill="none">
+        <path d="M400,370 L352,252"/>
+        <path d="M400,370 L500,272"/>
+        <path d="M352,252 L500,268"/>
+        <path d="M352,252 L290,370"/>
+        <path d="M400,370 L290,370"/>
+      </g>
+      <g stroke="#2b2f36" stroke-width="7" stroke-linecap="round" fill="none">
+        <path d="M498,268 L514,250"/>
+        <path d="M514,250 L530,370"/>
+        <path d="M514,250 L516,242 L492,246"/>
+      </g>
+      <circle cx="490" cy="246" r="6" fill="#2b2f36"/>
+      <path d="M328,246 C342,238 368,242 374,250 C362,258 338,258 328,252 Z" fill="#2b2f36"/>
+
+      <!-- STEP 3: crank, 0.9s; the far arm runs 180 degrees out of phase -->
+      <g id="crank-far">
+        <animateTransform attributeName="transform" type="rotate" from="180 400 370" to="540 400 370"
+                          dur="0.9s" repeatCount="indefinite"/>
+        <line x1="400" y1="370" x2="422" y2="370" stroke="#6b7078" stroke-width="6" stroke-linecap="round"/>
+        <rect x="414" y="364" width="18" height="11" rx="3" fill="#3a3f45"/>
+      </g>
+
+      <!-- STEP 3: FAR LEG - keyframed two-segment linkage, phase-shifted by 4 frames -->
+      <g transform="translate(355,250)">
+        <g>
+          <animateTransform attributeName="transform" type="rotate"
+            values="42.6;28.5;19.1;22.3;37.8;65.9;72.4;56.2;42.6"
+            keyTimes="0;0.125;0.25;0.375;0.5;0.625;0.75;0.875;1" dur="0.9s"
+            calcMode="spline"
+            keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"
+            repeatCount="indefinite"/>
+          <line x1="0" y1="0" x2="70" y2="0" stroke="#c9d2dc" stroke-width="14" stroke-linecap="round"/>
+          <g transform="translate(70,0)">
+            <g>
+              <animateTransform attributeName="transform" type="rotate"
+                values="68.8;85.8;86.6;70.8;43.6;0;0;40.9;68.8"
+                keyTimes="0;0.125;0.25;0.375;0.5;0.625;0.75;0.875;1" dur="0.9s"
+                calcMode="spline"
+                keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"
+                repeatCount="indefinite"/>
+              <line x1="0" y1="0" x2="78" y2="0" stroke="#c9d2dc" stroke-width="12" stroke-linecap="round"/>
+              <g transform="translate(78,0)">
+                <g>
+                  <animateTransform attributeName="transform" type="rotate"
+                    values="-111.4;-114.3;-105.7;-93.1;-81.4;-65.9;-72.4;-97.1;-111.4"
+                    keyTimes="0;0.125;0.25;0.375;0.5;0.625;0.75;0.875;1" dur="0.9s"
+                    calcMode="spline"
+                    keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"
+                    repeatCount="indefinite"/>
+                  <path d="M-3,-6 L16,-9 L24,0 L16,7 L-3,5 Z" fill="#e08f2f"/>
+                </g>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+
+      <!-- STEP 4: the pelican -->
+      <g id="pelican">
+        <!-- tail -->
+        <path d="M268,198 L212,176 L226,204 L204,214 L268,224 Z" fill="#dfe6ee"/>
+        <!-- back feathers, fluttering -->
+        <g transform="translate(300,168)">
+          <g>
+            <animateTransform attributeName="transform" type="rotate" values="0;-7;0;4;0"
+                              dur="0.7s" repeatCount="indefinite"/>
+            <path d="M0,0 C-26,-16 -52,-14 -70,-24 C-50,-6 -28,0 0,6 Z" fill="#cfd8e2"/>
+          </g>
+        </g>
+        <!-- body -->
+        <path d="M262,196 C268,150 320,132 372,146 C410,158 424,186 418,214 C410,246 360,262 316,254 C282,248 258,226 262,196 Z"
+              fill="#f4f7fa"/>
+        <path d="M286,232 C312,246 356,248 392,232 C372,252 316,254 286,232 Z" fill="#dbe3ec"/>
+        <!-- scarf -->
+        <g transform="translate(372,160)">
+          <g>
+            <animateTransform attributeName="transform" type="rotate" values="0;-8;0;5;0" dur="0.7s"
+                              repeatCount="indefinite"/>
+            <path d="M0,-4 C-30,-14 -56,-6 -84,-20 L-78,-4 C-52,8 -26,6 2,10 Z" fill="#e05b3f"/>
+          </g>
+        </g>
+        <!-- neck + head, gentle nod -->
+        <g transform="translate(366,160)">
+          <g>
+            <animateTransform attributeName="transform" type="rotate" values="0;2.5;0;-1.5;0" dur="1.4s"
+                              repeatCount="indefinite"/>
+            <path d="M0,0 C22,-18 36,-36 48,-48" stroke="#f4f7fa" stroke-width="30" stroke-linecap="round" fill="none"/>
+            <circle cx="62" cy="-58" r="25" fill="#f4f7fa"/>
+            <path d="M44,-72 C52,-88 66,-90 74,-84 C64,-80 54,-74 48,-68 Z" fill="#dfe6ee"/>
+            <!-- beak + pouch, pouch jiggles -->
+            <path d="M74,-72 C124,-66 174,-56 204,-46 C190,-40 132,-42 78,-52 Z" fill="#f2a33c"/>
+            <g transform="translate(78,-52)">
+              <g>
+                <animateTransform attributeName="transform" type="rotate" values="0;3;0;-2;0" dur="0.9s"
+                                  repeatCount="indefinite"/>
+                <path d="M0,0 C24,42 76,50 118,6 C78,20 34,16 0,0 Z" fill="#f7c56a"/>
+                <path d="M14,8 C40,34 74,38 104,14" stroke="#e0a24a" stroke-width="2" fill="none"/>
+              </g>
+            </g>
+            <!-- helmet -->
+            <path d="M38,-62 A26,26 0 0 1 90,-62 Z" fill="#e05b3f"/>
+            <path d="M52,-78 L58,-84 M66,-82 L70,-89" stroke="#ffffff" stroke-width="3" stroke-linecap="round"/>
+            <path d="M42,-56 C46,-44 52,-38 58,-34" stroke="#c8492f" stroke-width="3" fill="none"/>
+            <!-- eye -->
+            <circle cx="72" cy="-58" r="5" fill="#22303c"/>
+            <circle cx="74" cy="-60" r="1.6" fill="#ffffff"/>
+          </g>
+        </g>
+      </g>
+
+      <!-- near wing grips the bar: static so the contact point never slips -->
+      <path d="M348,168 C400,166 452,192 486,232 C494,246 480,258 464,252 C430,232 392,212 350,204 Z"
+            fill="#e6ecf3"/>
+      <g stroke="#c6d0da" stroke-width="2.5" fill="none">
+        <path d="M372,182 C408,190 442,208 468,234"/>
+        <path d="M366,192 C400,200 432,216 456,240"/>
+      </g>
+      <path d="M470,236 C482,240 490,244 492,250 C484,254 474,252 466,248 Z" fill="#cfd8e2"/>
+
+      <!-- STEP 3: near crank arm + pedal, then the near leg on top -->
+      <g id="crank-near">
+        <animateTransform attributeName="transform" type="rotate" from="0 400 370" to="360 400 370"
+                          dur="0.9s" repeatCount="indefinite"/>
+        <line x1="400" y1="370" x2="422" y2="370" stroke="#8b9099" stroke-width="7" stroke-linecap="round"/>
+        <rect x="414" y="364" width="18" height="11" rx="3" fill="#2b2f36"/>
+      </g>
+      <circle cx="400" cy="370" r="16" fill="none" stroke="#8b9099" stroke-width="3"/>
+      <circle cx="400" cy="370" r="5" fill="#2b2f36"/>
+
+      <g transform="translate(355,250)">
+        <g>
+          <animateTransform attributeName="transform" type="rotate"
+            values="37.8;65.9;72.4;56.2;42.6;28.5;19.1;22.3;37.8"
+            keyTimes="0;0.125;0.25;0.375;0.5;0.625;0.75;0.875;1" dur="0.9s"
+            calcMode="spline"
+            keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"
+            repeatCount="indefinite"/>
+          <line x1="0" y1="0" x2="70" y2="0" stroke="#f4f7fa" stroke-width="15" stroke-linecap="round"/>
+          <g transform="translate(70,0)">
+            <g>
+              <animateTransform attributeName="transform" type="rotate"
+                values="43.6;0;0;40.9;68.8;85.8;86.6;70.8;43.6"
+                keyTimes="0;0.125;0.25;0.375;0.5;0.625;0.75;0.875;1" dur="0.9s"
+                calcMode="spline"
+                keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"
+                repeatCount="indefinite"/>
+              <line x1="0" y1="0" x2="78" y2="0" stroke="#f4f7fa" stroke-width="13" stroke-linecap="round"/>
+              <g transform="translate(78,0)">
+                <g>
+                  <animateTransform attributeName="transform" type="rotate"
+                    values="-81.4;-65.9;-72.4;-97.1;-111.4;-114.3;-105.7;-93.1;-81.4"
+                    keyTimes="0;0.125;0.25;0.375;0.5;0.625;0.75;0.875;1" dur="0.9s"
+                    calcMode="spline"
+                    keySplines="0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1;0.4 0 0.6 1"
+                    repeatCount="indefinite"/>
+                  <path d="M-3,-6 L16,-9 L24,0 L16,7 L-3,5 Z" fill="#f2a33c"/>
+                  <path d="M2,-6 L4,6 M9,-7 L11,6" stroke="#d98f2c" stroke-width="1.6"/>
+                </g>
+              </g>
+            </g>
+          </g>
+        </g>
+      </g>
+    </g>
+  </g>
+
+  <!-- caption -->
+  <g font-family="'Segoe UI', Helvetica, Arial, sans-serif">
+    <text x="34" y="486" font-size="26" font-weight="700" fill="#f7f0dd" letter-spacing="1.5">PELICAN EXPRESS</text>
+    <text x="35" y="506" font-size="13" fill="#cfd6dd" letter-spacing="3">COASTAL ROUTE 9 - 60 FPS - PURE SMIL</text>
+  </g>
+</svg>
+</body>
+</html

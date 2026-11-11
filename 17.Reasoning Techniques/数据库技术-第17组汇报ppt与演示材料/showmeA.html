@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>SVG 示例</title>
+</head>
+<body>
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 600" width="800" height="600" role="img" aria-labelledby="title desc">
+  <title id="title">Animated pelican riding a bicycle</title>
+  <desc id="desc">A pelican wearing a helmet rides a bicycle while the wheels spin, the pedals turn, and the scenery moves.</desc>
+
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0%" stop-color="#dbeafe" />
+      <stop offset="100%" stop-color="#f8fafc" />
+    </linearGradient>
+  </defs>
+
+  <!-- Sky -->
+  <rect width="800" height="600" fill="url(#sky)" />
+
+  <!-- Sun -->
+  <circle cx="700" cy="90" r="45" fill="#fde68a" stroke="#f59e0b" stroke-width="4" />
+
+  <!-- Moving clouds -->
+  <g fill="#ffffff" opacity="0.9">
+    <ellipse cx="120" cy="100" rx="50" ry="22" />
+    <ellipse cx="175" cy="110" rx="45" ry="20" />
+    <ellipse cx="150" cy="88" rx="35" ry="18" />
+    <animateTransform attributeName="transform" type="translate" values="0 0;-800 0" dur="14s" repeatCount="indefinite" />
+  </g>
+
+  <g fill="#ffffff" opacity="0.85">
+    <ellipse cx="700" cy="150" rx="45" ry="20" />
+    <ellipse cx="750" cy="160" rx="40" ry="18" />
+    <ellipse cx="725" cy="138" rx="30" ry="16" />
+    <animateTransform attributeName="transform" type="translate" values="0 0;-800 0" dur="14s" begin="-7s" repeatCount="indefinite" />
+  </g>
+
+  <!-- Ground and road -->
+  <rect x="0" y="500" width="800" height="100" fill="#86efac" />
+  <line x1="0" y1="518" x2="800" y2="518" stroke="#64748b" stroke-width="8" />
+  <line x1="0" y1="518" x2="800" y2="518" stroke="#ffffff" stroke-width="4" stroke-dasharray="30 30" opacity="0.7">
+    <animate attributeName="stroke-dashoffset" values="0;-60" dur="0.8s" repeatCount="indefinite" />
+  </line>
+
+  <!-- Bicycle and pelican group -->
+  <g>
+    <animateTransform attributeName="transform" type="translate" values="0 0;0 -4;0 0;0 -4;0 0" dur="1s" repeatCount="indefinite" />
+
+    <!-- Rear wheel -->
+    <g fill="none" stroke="#1f2937" stroke-width="12">
+      <circle cx="220" cy="420" r="72" />
+      <path d="M220 348 L220 492 M148 420 L292 420 M169 369 L271 471 M169 471 L271 369" stroke="#9ca3af" stroke-width="3" />
+      <animateTransform attributeName="transform" type="rotate" values="0 220 420;360 220 420" dur="0.5s" repeatCount="indefinite" />
+    </g>
+
+    <!-- Front wheel -->
+    <g fill="none" stroke="#1f2937" stroke-width="12">
+      <circle cx="580" cy="420" r="72" />
+      <path d="M580 348 L580 492 M508 420 L652 420 M529 369 L631 471 M529 471 L631 369" stroke="#9ca3af" stroke-width="3" />
+      <animateTransform attributeName="transform" type="rotate" values="0 580 420;360 580 420" dur="0.5s" repeatCount="indefinite" />
+    </g>
+
+    <!-- Bicycle frame -->
+    <g fill="none" stroke="#1f2937" stroke-width="12" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M220 420 L400 420" />
+      <path d="M400 420 L360 280 L545 280" />
+      <path d="M545 280 L400 420" />
+      <path d="M545 280 L580 420" />
+      <path d="M545 280 L530 250 L590 242" />
+    </g>
+
+    <!-- Saddle -->
+    <path d="M335 282 C350 262 385 260 400 276 L385 286 C365 276 345 280 335 282 Z" fill="#1f2937" stroke="#1f2937" stroke-width="3" />
+
+    <!-- Pelican tail -->
+    <path d="M300 225 L250 205 L275 245 Z" fill="#f8fafc" stroke="#1f2937" stroke-width="4" />
+
+    <!-- Pelican body -->
+    <ellipse cx="370" cy="225" rx="82" ry="55" fill="#f8fafc" stroke="#1f2937" stroke-width="5" />
+
+    <!-- Pelican neck -->
+    <path d="M425 205 C455 175 475 155 500 155" fill="none" stroke="#1f2937" stroke-width="38" stroke-linecap="round" />
+    <path d="M425 205 C455 175 475 155 500 155" fill="none" stroke="#f8fafc" stroke-width="28" stroke-linecap="round" />
+
+    <!-- Pelican head -->
+    <circle cx="505" cy="155" r="28" fill="#f8fafc" stroke="#1f2937" stroke-width="5" />
+
+    <!-- Pelican pouch and beak -->
+    <path d="M528 162 C565 235 615 228 655 168 L660 145 L525 155 Z" fill="#f7c948" stroke="#1f2937" stroke-width="4" />
+    <path d="M525 155 L660 145 L655 168 L528 162 Z" fill="#f6a623" stroke="#1f2937" stroke-width="4" />
+
+    <!-- Eye -->
+    <circle cx="500" cy="148" r="4" fill="#1f2937" />
+
+    <!-- Helmet -->
+    <path d="M485 135 C495 115 525 115 535 138 L520 146 L495 146 Z" fill="#ef4444" stroke="#1f2937" stroke-width="4" />
+
+    <!-- Pelican wing holding handlebar -->
+    <path d="M370 205 C420 195 480 210 545 240 C525 260 475 268 410 248 Z" fill="#e2e8f0" stroke="#1f2937" stroke-width="5" />
+
+    <!-- Crank and pedals -->
+    <g>
+      <path d="M400 420 L435 420 M400 420 L365 420" fill="none" stroke="#1f2937" stroke-width="8" stroke-linecap="round" />
+      <rect x="428" y="415" width="22" height="10" rx="3" fill="#1f2937" />
+      <rect x="350" y="415" width="22" height="10" rx="3" fill="#1f2937" />
+      <animateTransform attributeName="transform" type="rotate" values="0 400 420;360 400 420" dur="0.8s" repeatCount="indefinite" />
+    </g>
+
+    <!-- Pelican legs -->
+    <g stroke="#f6a623" stroke-width="10" fill="none" stroke-linecap="round">
+      <path d="M375 275 Q415 355 435 420">
+        <animate attributeName="d"
+          values="
+            M375 275 Q415 355 435 420;
+            M375 275 Q400 365 400 455;
+            M375 275 Q365 350 365 420;
+            M375 275 Q390 335 400 385;
+            M375 275 Q415 355 435 420
+          "
+          dur="0.8s"
+          repeatCount="indefinite"
+        />
+      </path>
+
+      <path d="M355 275 Q350 350 365 420">
+        <animate attributeName="d"
+          values="
+            M355 275 Q350 350 365 420;
+            M355 275 Q375 335 400 385;
+            M355 275 Q405 355 435 420;
+            M355 275 Q375 365 400 455;
+            M355 275 Q350 350 365 420
+          "
+          dur="0.8s"
+          repeatCount="indefinite"
+        />
+      </path>
+    </g>
+
+    <!-- Feet -->
+    <circle cx="435" cy="420" r="8" fill="#f6a623" stroke="#1f2937" stroke-width="2">
+      <animate attributeName="cx" values="435;400;365;400;435" dur="0.8s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="420;455;420;385;420" dur="0.8s" repeatCount="indefinite" />
+    </circle>
+
+    <circle cx="365" cy="420" r="8" fill="#f6a623" stroke="#1f2937" stroke-width="2">
+      <animate attributeName="cx" values="365;400;435;400;365" dur="0.8s" repeatCount="indefinite" />
+      <animate attributeName="cy" values="420;385;420;455;420" dur="0.8s" repeatCount="indefinite" />
+    </circle>
+  </g>
+</svg>
+</body>
+</html
